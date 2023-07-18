@@ -1,18 +1,18 @@
 import argparse
 import logging
 import os
-import platform
-import sys
+import platform  # 导入标准库 `platform`，此库可提供访问平台标识数据的功能，例如操作系统、平台版本等。
+import sys  # 导入 `sys` 模块，它提供对一些 Python 解释器使用或维护的变量和函数的访问。
 
-from rasa_sdk import __version__ as rasa_sdk_version
-from rasa.constants import MINIMUM_COMPATIBLE_VERSION
-from rasa.utils.log_utils import configure_structlog
+from rasa_sdk import __version__ as rasa_sdk_version  # 从 `rasa_sdk` 模块中导入 `__version__` 并将其别名设置为 `rasa_sdk_version`。`__version__` 通常用于表示模块的版本号。
+from rasa.constants import MINIMUM_COMPATIBLE_VERSION  # 从 `rasa.constants` 模块中导入 `MINIMUM_COMPATIBLE_VERSION`，它代表 Rasa 框架的最低兼容版本。
+from rasa.utils.log_utils import configure_structlog  # 从 `rasa.utils.log_utils` 模块中导入 `configure_structlog` 函数，该函数用于配置 structlog 库，使其适用于 Rasa 的日志记录需求。
 
-import rasa.telemetry
-import rasa.utils.io
-import rasa.utils.tensorflow.environment as tf_env
-from rasa import version
-from rasa.cli import (
+import rasa.telemetry  # 导入 `rasa.telemetry` 模块，它可能用于收集和发送使用 Rasa 的遥测数据。
+import rasa.utils.io  # 导入 `rasa.utils.io` 模块，它可能包含有关 IO 操作的各种实用函数。
+import rasa.utils.tensorflow.environment as tf_env  # 从 `rasa.utils.tensorflow.environment` 模块中导入所有内容，并将其别名设置为 `tf_env`，此模块可能包含有关 TensorFlow 环境配置的函数。
+from rasa import version  # 从 `rasa` 包中导入 `version`，它可能表示 Rasa 的版本号。
+from rasa.cli import (  # 从 `rasa.cli` 模块中导入多个子模块，如 `data`, `export`, `interactive`, `run`, `scaffold`, `shell`, `telemetry`, `test`, `train`, `visualize`, `x`, `evaluate`。这些子模块提供了各种 CLI（命令行界面）功能。
     data,
     export,
     interactive,
@@ -26,14 +26,15 @@ from rasa.cli import (
     x,
     evaluate,
 )
-from rasa.cli.arguments.default_arguments import add_logging_options
-from rasa.cli.utils import parse_last_positional_argument_as_model_path
-from rasa.plugin import plugin_manager
-from rasa.shared.exceptions import RasaException
-from rasa.shared.utils.cli import print_error
-from rasa.utils.common import configure_logging_and_warnings
+from rasa.cli.arguments.default_arguments import add_logging_options  # 从 `rasa.cli.arguments.default_arguments` 模块中导入 `add_logging_options` 函数，此函数可能用于添加日志记录选项。
+from rasa.cli.utils import parse_last_positional_argument_as_model_path  # 从 `rasa.cli.utils` 模块中导入 `parse_last_positional_argument_as_model_path` 函数，该函数可能用于解析作为模型路径的命令行参数。
+from rasa.plugin import plugin_manager  # 从 `rasa.plugin` 模块中导入 `plugin_manager`，它可能是用于管理 Rasa 插件的对象或者函数。
+from rasa.shared.exceptions import RasaException  # 从 `rasa.shared.exceptions` 模块中导入 `RasaException`，这是 Rasa 所有自定义异常的基类。
+from rasa.shared.utils.cli import print_error  # 从 `rasa.shared.utils.cli` 模块中导入 `print_error` 函数，此函数可能用于打印错误信息。
+from rasa.utils.common import configure_logging_and_warnings  # 从 `rasa.utils.common` 模块中导入 `configure_logging_and_warnings` 函数，此函数可能用于配置日志记录和警告。
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)  # 创建一个名为 `__name__` 的日志记录器对象，它可以用于在此模块中记录日志。`__name__` 是一个内置变量，代表当前模块的名字。
+
 
 
 def create_argument_parser() -> argparse.ArgumentParser:
