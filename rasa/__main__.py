@@ -37,32 +37,33 @@ logger = logging.getLogger(__name__)  # 创建一个名为 `__name__` 的日志�
 
 
 
-def create_argument_parser() -> argparse.ArgumentParser:
-    """Parse all the command line arguments for the training script."""
-    parser = argparse.ArgumentParser(
+def create_argument_parser() -> argparse.ArgumentParser:  # 定义了一个名为 create_argument_parser 的函数，此函数不接受任何参数，并指定返回值类型为 argparse.ArgumentParser。
+    """Parse all the command line arguments for the training script."""  # 这是函数的 docstring，简单描述了函数的功能。
+    parser = argparse.ArgumentParser(  # 创建了一个 argparse.ArgumentParser 对象并赋值给 parser。此对象用于解析命令行参数。
         prog="rasa",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         description="Rasa command line interface. Rasa allows you to build "
         "your own conversational assistants 🤖. The 'rasa' command "
         "allows you to easily run most common commands like "
         "creating a new bot, training or evaluating models.",
-    )
+    )  # 在创建时，传入了 prog, formatter_class, 和 description 参数，分别用于指定程序名、帮助文本的格式以及程序的描述。
 
-    parser.add_argument(
+    parser.add_argument(  # 给 parser 添加了一个参数 --version，这个参数不需要值（因为 action="store_true"），默认值被设置为不显示（因为 default=argparse.SUPPRESS）。
         "--version",
         action="store_true",
         default=argparse.SUPPRESS,
         help="Print installed Rasa version",
     )
 
-    parent_parser = argparse.ArgumentParser(add_help=False)
-    add_logging_options(parent_parser)
-    parent_parsers = [parent_parser]
+    parent_parser = argparse.ArgumentParser(add_help=False)  # 创建了另一个 argparse.ArgumentParser 对象 parent_parser，在创建时指定了不自动添加 -h/--help 选项。
+    add_logging_options(parent_parser)  # 调用 add_logging_options 函数，给 parent_parser 添加了一些关于日志的参数。
 
-    subparsers = parser.add_subparsers(help="Rasa commands")
+    parent_parsers = [parent_parser]  # 创建了一个包含 parent_parser 的列表 parent_parsers。
 
-    scaffold.add_subparser(subparsers, parents=parent_parsers)
-    run.add_subparser(subparsers, parents=parent_parsers)
+    subparsers = parser.add_subparsers(help="Rasa commands")  # 给 parser 添加了子解析器，这些子解析器的帮助信息被设置为 "Rasa commands"，并且把这个子解析器对象赋值给 subparsers。
+
+    scaffold.add_subparser(subparsers, parents=parent_parsers)  # 给 subparsers 添加各种子解析器，这些子解析器分别由各个模块（如 scaffold）的 add_subparser 函数添加。
+    run.add_subparser(subparsers, parents=parent_parsers)  # 在添加子解析器时，也将 parent_parsers 作为父解析器。
     shell.add_subparser(subparsers, parents=parent_parsers)
     train.add_subparser(subparsers, parents=parent_parsers)
     interactive.add_subparser(subparsers, parents=parent_parsers)
@@ -73,11 +74,13 @@ def create_argument_parser() -> argparse.ArgumentParser:
     export.add_subparser(subparsers, parents=parent_parsers)
     x.add_subparser(subparsers, parents=parent_parsers)
     evaluate.add_subparser(subparsers, parents=parent_parsers)
-    plugin_manager().hook.refine_cli(
+
+    plugin_manager().hook.refine_cli(  # 调用 plugin_manager 的 hook.refine_cli 方法，可能用于根据插件进一步定制 CLI。
         subparsers=subparsers, parent_parsers=parent_parsers
     )
 
-    return parser
+    return parser  # 返回创建和配置好的 argparse.ArgumentParser 对象。
+
 
 
 def print_version() -> None:
